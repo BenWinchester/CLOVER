@@ -19,8 +19,7 @@ import pandas as pd
 
 import sys
 
-sys.path.insert(0, "/***YOUR LOCAL FILE PATH***/CLOVER 4.0/Scripts/Conversion scripts")
-from Conversion import Conversion
+from ..conversion_scripts import Conversion
 
 
 class Finance:

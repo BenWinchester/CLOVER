@@ -21,8 +21,7 @@ import math
 
 import sys
 
-sys.path.insert(0, "/***YOUR LOCAL FILE PATH***/CLOVER/Scripts/Conversion scripts")
-from Conversion import Conversion
+from ..conversion_scripts import Conversion
 
 
 class Load:
@@ -227,7 +226,7 @@ class Load:
                 header=None,
                 index_col=None,
             )
-            yearly_profile = Conversion().monthly_profile_to_daily_profile(
+            yearly_profile = Conversion.Conversion().monthly_profile_to_daily_profile(
                 monthly_profile
             )
             yearly_profile = pd.DataFrame.transpose(yearly_profile)

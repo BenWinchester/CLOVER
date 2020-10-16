@@ -19,15 +19,8 @@ import pandas as pd
 import datetime
 import math
 
-import sys
-
-sys.path.insert(0, "/***YOUR LOCAL FILE PATH***/CLOVER 4.0/Scripts/Generation scripts/")
-from Solar import Solar
-from Diesel import Diesel
-import sys
-
-sys.path.insert(0, "/***YOUR LOCAL FILE PATH***/CLOVER 4.0/Scripts/Load scripts/")
-from Load import Load
+from ..generation_scripts import Solar, Diesel
+from ..load_scripts import Load
 
 #%%
 class Energy_System:
@@ -128,7 +121,7 @@ class Energy_System:
         storage_profile = pd.DataFrame(input_profiles["Storage profile (kWh)"])
         kerosene_profile = pd.DataFrame(input_profiles["Kerosene lamps"])
         households = pd.DataFrame(
-            Load().population_hourly()[start_year * 8760 : end_year * 8760].values
+            Load.Load().population_hourly()[start_year * 8760 : end_year * 8760].values
         )
 
         #   Initialise battery storage parameters
@@ -258,12 +251,12 @@ class Energy_System:
 
         #   Use backup diesel generator
         if diesel_backup_status == "Y":
-            diesel_energy, diesel_times = Diesel().get_diesel_energy_and_times(
+            diesel_energy, diesel_times = Diesel.Diesel().get_diesel_energy_and_times(
                 unmet_energy, blackout_times, diesel_backup_threshold
             )
             diesel_capacity = math.ceil(np.max(diesel_energy))
             diesel_fuel_usage = pd.DataFrame(
-                Diesel()
+                Diesel.Diesel()
                 .get_diesel_fuel_usage(diesel_capacity, diesel_energy, diesel_times)
                 .values
             )
@@ -320,7 +313,7 @@ class Energy_System:
                 "Initial PV size": PV_size,
                 "Initial storage size": storage_size,
                 "Final PV size": PV_size
-                * Solar().solar_degradation()[0][8760 * (end_year - start_year)],
+                * Solar.Solar().solar_degradation()[0][8760 * (end_year - start_year)],
                 "Final storage size": storage_size
                 * np.min(battery_health["Battery health"]),
                 "Diesel capacity": diesel_capacity,
@@ -464,7 +457,7 @@ class Energy_System:
         #   Initialise power generation, including degradation of PV
         PV_generation = PV_size * pd.DataFrame(
             self.get_PV_generation()[start_hour:end_hour].values
-            * Solar().solar_degradation()[0 : (end_hour - start_hour)].values
+            * Solar.Solar().solar_degradation()[0 : (end_hour - start_hour)].values
         )
         grid_status = pd.DataFrame(self.get_grid_profile()[start_hour:end_hour].values)
         load_profile = pd.DataFrame(self.get_load_profile()[start_hour:end_hour].values)

@@ -18,10 +18,7 @@ For more information, please email:
 import numpy as np
 import pandas as pd
 
-import sys
-
-sys.path.insert(0, "/***YOUR LOCAL FILE PATH***/CLOVER 4.0/Scripts/Conversion scripts")
-from Conversion import Conversion
+from ..conversion_scripts import Conversion
 
 
 class GHGs:
@@ -328,7 +325,7 @@ class GHGs:
         kerosene_GHGs = (
             kerosene_lamps_in_use_hourly * self.GHG_inputs.loc["Kerosene GHGs"]
         )
-        #        total_daily_GHGs = Conversion().hourly_profile_to_daily_sum(kerosene_GHGs)
+        #        total_daily_GHGs = Conversion.Conversion().hourly_profile_to_daily_sum(kerosene_GHGs)
         #        return total_daily_GHGs#.replace(np.nan,0.0)
         return np.sum(kerosene_GHGs)
 
@@ -350,7 +347,7 @@ class GHGs:
         kerosene_GHGs = (
             kerosene_lamps_mitigated_hourly * self.GHG_inputs.loc["Kerosene GHGs"]
         )
-        #        total_daily_GHGs = Conversion().hourly_profile_to_daily_sum(kerosene_GHGs)
+        #        total_daily_GHGs = Conversion.Conversion().hourly_profile_to_daily_sum(kerosene_GHGs)
         return np.sum(kerosene_GHGs)
 
     def get_grid_GHGs(self, grid_energy_hourly, start_year=0, end_year=20):
@@ -369,7 +366,7 @@ class GHGs:
         grid_GHGs_initial = self.GHG_inputs.loc["Grid GHGs (initial)"]
         grid_GHGs_final = self.GHG_inputs.loc["Grid GHGs (final)"]
         days = int(365 * (end_year - start_year))
-        total_daily_energy = Conversion().hourly_profile_to_daily_sum(
+        total_daily_energy = Conversion.Conversion().hourly_profile_to_daily_sum(
             grid_energy_hourly
         )
         #   Account for reduction in grid GHG intensity
